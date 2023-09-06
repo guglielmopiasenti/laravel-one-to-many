@@ -108,10 +108,15 @@ class ProjectController extends Controller
      */
     public function destroy(Project $project)
     {
+        // Save the project to the session before deleting it
+        session()->put('deleted_project', $project);
+
         $project->delete();
+
         return redirect()->route('admin.projects.index')
             ->with('message', 'Project deleted successfully')
-            ->with('type', 'success');
+            ->with('type', 'success')
+            ->with('show_toast', true);
     }
 
     public function restore(string $id)
@@ -121,7 +126,7 @@ class ProjectController extends Controller
 
         $project->restore();
         return to_route('admin.projects.index')
-            ->with('message', 'Project restored succesfully')
+            ->with('toast-message', 'Project restored succesfully')
             ->with('type', 'success');
     }
 }
