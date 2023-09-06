@@ -38,7 +38,7 @@ class ProjectController extends Controller
             'is_featured' => 'nullable|boolean',
             'github_url' => 'required|url',
         ];
-    
+
         $customMessages = [
             'name.required' => 'Name is mandatory',
             'description.required' => 'Description is mandatory',
@@ -47,7 +47,7 @@ class ProjectController extends Controller
             'github_url.required' => 'GitHub URL is mandatory',
             'github_url.url' => 'GitHub URL must be a valid URL',
         ];
-    
+
         $validated = $request->validate($rules, $customMessages);
 
         $project = Project::create($validated);
@@ -85,7 +85,7 @@ class ProjectController extends Controller
             'is_featured' => 'nullable|boolean',
             'github_url' => 'required|url',
         ];
-    
+
         $customMessages = [
             'name.required' => 'Name is mandatory',
             'description.required' => 'Description is mandatory',
@@ -94,7 +94,7 @@ class ProjectController extends Controller
             'github_url.required' => 'GitHub URL is mandatory',
             'github_url.url' => 'GitHub URL must be a valid URL',
         ];
-    
+
         $validated = $request->validate($rules, $customMessages);
 
         $project->update($validated);
@@ -114,13 +114,14 @@ class ProjectController extends Controller
             ->with('type', 'success');
     }
 
-    public function restore(string $id){
+    public function restore(string $id)
+    {
         $project = Project::onlyTrashed()->findOrFail($id);
 
 
         $project->restore();
         return to_route('admin.projects.index')
-        ->with('alert-type', 'success')
-        ->with('alert-message', 'Project restored succesfully');
+            ->with('message', 'Project restored succesfully')
+            ->with('type', 'success');
     }
 }
