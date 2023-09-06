@@ -30,14 +30,25 @@ class ProjectController extends Controller
      */
     public function store(Request $request)
     {
-        $validated = $request->validate([
+        $rules = [
             'name' => 'required|string|max:255',
             'description' => 'required|string',
             'technologies' => 'required|string',
             'screenshot' => 'nullable|image|max:2048',
             'is_featured' => 'nullable|boolean',
             'github_url' => 'required|url',
-        ]);
+        ];
+    
+        $customMessages = [
+            'name.required' => 'Name is mandatory',
+            'description.required' => 'Description is mandatory',
+            'technologies.required' => 'Technologies are mandatory',
+            'screenshot.image' => 'Screenshot must be an image',
+            'github_url.required' => 'GitHub URL is mandatory',
+            'github_url.url' => 'GitHub URL must be a valid URL',
+        ];
+    
+        $validated = $request->validate($rules, $customMessages);
 
         $project = Project::create($validated);
         return redirect()->route('admin.projects.index')
@@ -66,15 +77,25 @@ class ProjectController extends Controller
      */
     public function update(Request $request, Project $project)
     {
-        $validated = $request->validate([
+        $rules = [
             'name' => 'required|string|max:255',
             'description' => 'required|string',
             'technologies' => 'required|string',
             'screenshot' => 'nullable|image|max:2048',
             'is_featured' => 'nullable|boolean',
             'github_url' => 'required|url',
-
-        ]);
+        ];
+    
+        $customMessages = [
+            'name.required' => 'Name is mandatory',
+            'description.required' => 'Description is mandatory',
+            'technologies.required' => 'Technologies are mandatory',
+            'screenshot.image' => 'Screenshot must be an image',
+            'github_url.required' => 'GitHub URL is mandatory',
+            'github_url.url' => 'GitHub URL must be a valid URL',
+        ];
+    
+        $validated = $request->validate($rules, $customMessages);
 
         $project->update($validated);
         return redirect()->route('admin.projects.index')
