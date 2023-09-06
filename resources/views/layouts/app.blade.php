@@ -41,6 +41,7 @@
         </main>
     </div>
 
+    @include('includes.layout.toast')
     @yield('scripts')
 </body>
 
