@@ -31,7 +31,11 @@ class ProjectController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'name' => 'required|max:255',
+            'name' => 'required|string|max:255',
+            'description' => 'required|string',
+            'technologies' => 'required|string',
+            'screenshot' => 'nullable|image|max:2048',
+            'is_featured' => 'nullable|boolean',
             'github_url' => 'required|url',
         ]);
 
@@ -63,7 +67,11 @@ class ProjectController extends Controller
     public function update(Request $request, Project $project)
     {
         $validated = $request->validate([
-            'name' => 'required|max:255',
+            'name' => 'required|string|max:255',
+            'description' => 'required|string',
+            'technologies' => 'required|string',
+            'screenshot' => 'nullable|image|max:2048',
+            'is_featured' => 'nullable|boolean',
             'github_url' => 'required|url',
 
         ]);
