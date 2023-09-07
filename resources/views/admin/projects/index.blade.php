@@ -27,7 +27,15 @@
                     <tr>
                         <th scope="row">{{ $project->id }}</th>
                         <td>{{ $project->name }}</td>
-                        <td>{{ $project->type?->label }}</td>
+                        <td>
+                            @if ($project->type)
+                                <span class="badge" style="background-color: {{ $project->type->color }}">
+                                    {{ $project->type->label }}
+                                </span>
+                            @else
+                                -
+                            @endif
+                        </td>
                         <td>{{ $project->github_url }}</td>
                         <td>{{ $project->created_at }}</td>
                         <td>{{ $project->updated_at }}</td>
@@ -60,10 +68,10 @@
                 </tr>
             </tbody>
         </table>
-      </div>
-      @if ($projects->hasPages())
-          {{ $projects->links() }}
-      @endif
+    </div>
+    @if ($projects->hasPages())
+        {{ $projects->links() }}
+    @endif
 @endsection
 @section('scripts')
     @vite('resources/js/delete-confirmation.js')
