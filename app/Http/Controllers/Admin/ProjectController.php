@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Models\Project;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Storage;
 
 class ProjectController extends Controller
 {
@@ -34,7 +35,7 @@ class ProjectController extends Controller
             'name' => 'required|string|max:255',
             'description' => 'required|string',
             'technologies' => 'required|string',
-            'screenshot' => 'nullable|image|max:2048',
+            'screenshot' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg,bmp',
             'is_featured' => 'nullable|boolean',
             'github_url' => 'required|url',
         ];
@@ -49,6 +50,11 @@ class ProjectController extends Controller
         ];
 
         $validated = $request->validate($rules, $customMessages);
+
+        if ($request->hasFile('screenshot')) {
+            $path = $request->file('screenshot')->store('screenshots', 'public');
+            $validated['screenshot_path'] = $path;
+        }
 
         $project = Project::create($validated);
         return redirect()->route('admin.projects.index')
@@ -81,7 +87,7 @@ class ProjectController extends Controller
             'name' => 'required|string|max:255',
             'description' => 'required|string',
             'technologies' => 'required|string',
-            'screenshot' => 'nullable|image|max:2048',
+            'screenshot' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg,bmp',
             'is_featured' => 'nullable|boolean',
             'github_url' => 'required|url',
         ];
@@ -97,6 +103,15 @@ class ProjectController extends Controller
 
         $validated = $request->validate($rules, $customMessages);
 
+        if ($request->hasFile('screenshot')) {
+            if ($project->screenshot) {
+                Storage::disk('public')->delete($project->screenshot);
+            }
+
+            $path = $request->file('screenshot')->store('screenshots', 'public');
+            $validated['screenshot_path'] = $path;
+        }
+
         $project->update($validated);
         return redirect()->route('admin.projects.index')
             ->with('message', 'Project updated successfully')
@@ -111,6 +126,11 @@ class ProjectController extends Controller
         // Save the project to the session before deleting it
         session()->put('deleted_project', $project);
 
+        // Delete the screenshot if it exists
+        if ($project->screenshot) {
+            Storage::disk('public')->delete($project->screenshot);
+        }
+
         $project->delete();
 
         return redirect()->route('admin.projects.index')
@@ -120,12 +140,12 @@ class ProjectController extends Controller
     }
 
     public function restore(string $id)
-{
-    $project = Project::onlyTrashed()->findOrFail($id);
-    $project->restore();
-    return redirect()->route('admin.projects.index')
-        ->with('toast-message', 'Project restored successfully')
-        ->with('toast-project-id', $id)
-        ->with('type', 'success');
-}
+    {
+        $project = Project::onlyTrashed()->findOrFail($id);
+        $project->restore();
+        return redirect()->route('admin.projects.index')
+            ->with('toast-message', 'Project restored successfully')
+            ->with('toast-project-id', $id)
+            ->with('type', 'success');
+    }
 }

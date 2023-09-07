@@ -7,7 +7,7 @@
         <h1 class="text-center display-1 my-4">{{ $project->name }}</h1>
     </header>
     <div class="d-flex align-items-center justify-content-between gap-3">
-        <img src="{{ $project->screenshot_path }}" alt="{{ $project->name }}">
+        <img src="{{ asset('storage/' . $project->screenshot_path) }}" alt="Project Screenshot">
         <div class="card p-3">
             <p>{{ $project->description }}</p>
             <div><strong>Technologies:</strong> {{ $project->technologies }}</div>
