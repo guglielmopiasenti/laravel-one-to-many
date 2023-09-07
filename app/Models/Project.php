@@ -19,4 +19,7 @@ class Project extends Model
         'is_featured',
         'github_url',
     ];
+    public function type(){
+        return $this->belongsTo(Type::class);
+    }
 }
