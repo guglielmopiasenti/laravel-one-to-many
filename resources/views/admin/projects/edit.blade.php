@@ -35,6 +35,22 @@
                                 <label for="description" class="form-label">Description</label>
                                 <textarea class="form-control" id="description" name="description" rows="3" required>{{ old('description', $project->description) }}</textarea>
                             </div>
+                            <div class="col-6">
+                                <div class="mb-3">
+                                    <label for="type" class="form-label">Types</label>
+                                    <select class="form-select"
+                                        @error('type_id', $project->type_id) is-invalid @elseif(old('type_id')) is-valid @enderror
+                                        id="type" name="type_id">
+                                        <option value="">None</option>
+                                        @foreach ($types as $type)
+                                            <option @if(old('type_id') == $type->id) selected @endif value="{{ $type->id }}">{{ $type->label }}</option>
+                                        @endforeach
+                                    </select>
+                                    @error('type_id')
+                                        <span class="text-danger">{{ $message }}</span>
+                                    @enderror
+                                </div>
+                            </div>
                             <div class="mb-3">
                                 <label for="technologies" class="form-label">Technologies</label>
                                 <input type="text" class="form-control" id="technologies" name="technologies"
