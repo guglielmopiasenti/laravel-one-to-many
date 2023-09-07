@@ -51,7 +51,7 @@
                                     <input type="file" class="form-control" id="screenshot" name="screenshot">
                                 </div>
                                 <div class="col-1">
-                                    <img src="{{ old('screenshot', 'https://marcolanci.it/utils/placeholder.jpg') }}" alt="preview" class="img-fluid" id="img-preview">
+                                    <img src="{{ isset($project) && $project->screenshot_path ? asset('storage/' . $project->screenshot_path) : 'https://marcolanci.it/utils/placeholder.jpg' }}" alt="preview" class="img-fluid" id="img-preview">
                                 </div>
                             </div>
                             <div class="mb-3 form-check">
@@ -74,12 +74,22 @@
     </div>
 @endsection
 @section('scripts')
-    <script>
-        const placeholder = 'https://marcolanci.it/utils/placeholder.jpg';
-        const imageField = document.getElementById('screenshot');
-        const previewField = document.getElementById('img-preview');
-        imageField.addEventListener('input', () => {
-            previewField.src = imageField.value ? imageField.value : placeholder;
-        });
-    </script>
+<script>
+    const placeholder = 'https://marcolanci.it/utils/placeholder.jpg';
+    const imageField = document.getElementById('screenshot');
+    const previewField = document.getElementById('img-preview');
+    
+    imageField.addEventListener('change', function() {
+        const file = this.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                previewField.setAttribute('src', event.target.result);
+            }
+            reader.readAsDataURL(file);
+        } else {
+            previewField.setAttribute('src', placeholder);
+        }
+    });
+</script>
 @endsection
