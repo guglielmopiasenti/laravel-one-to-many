@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Models\Project;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\Type;
 use Illuminate\Support\Facades\Storage;
 
 class ProjectController extends Controller
@@ -23,7 +24,9 @@ class ProjectController extends Controller
      */
     public function create()
     {
-        return view('admin.projects.create');
+        $project = new Project();
+        $types = Type::all();
+        return view('admin.projects.create', compact('project', 'types'));
     }
 
     /**
@@ -38,6 +41,7 @@ class ProjectController extends Controller
             'screenshot' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg,bmp',
             'is_featured' => 'nullable|boolean',
             'github_url' => 'required|url',
+            'type_id' => 'nullable|exists:types,id',
         ];
 
         $customMessages = [
@@ -47,6 +51,7 @@ class ProjectController extends Controller
             'screenshot.image' => 'Screenshot must be an image',
             'github_url.required' => 'GitHub URL is mandatory',
             'github_url.url' => 'GitHub URL must be a valid URL',
+            'type_id.exists' => 'Select a valid category',
         ];
 
         $validated = $request->validate($rules, $customMessages);
@@ -75,7 +80,8 @@ class ProjectController extends Controller
      */
     public function edit(Project $project)
     {
-        return view('admin.projects.edit', compact('project'));
+        $types = Type::all();
+        return view('admin.projects.edit', compact('project', 'types'));
     }
 
     /**
@@ -90,6 +96,7 @@ class ProjectController extends Controller
             'screenshot' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg,bmp',
             'is_featured' => 'nullable|boolean',
             'github_url' => 'required|url',
+            'type_id' => 'nullable|exists:types,id',
         ];
 
         $customMessages = [
@@ -99,6 +106,7 @@ class ProjectController extends Controller
             'screenshot.image' => 'Screenshot must be an image',
             'github_url.required' => 'GitHub URL is mandatory',
             'github_url.url' => 'GitHub URL must be a valid URL',
+            'type_id.exists' => 'Select a valid category',
         ];
 
         $validated = $request->validate($rules, $customMessages);

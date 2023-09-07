@@ -18,6 +18,7 @@ class Project extends Model
         'screenshot_path',
         'is_featured',
         'github_url',
+        'type_id',
     ];
     public function type(){
         return $this->belongsTo(Type::class);

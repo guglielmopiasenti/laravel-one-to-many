@@ -16,6 +16,7 @@ class ProjectSeeder extends Seeder
         for ($i = 1; $i <= 50; $i++) {
             $project = new Project();
             $project->name = $faker->word();
+            $project->type_id = $faker->numberBetween(1, 5);
             $project->github_url = url('https://github.com/'); 
             $project->screenshot_path = $faker->imageUrl(640, 480, 'animals', true);
             $project->description = $faker->paragraph();
