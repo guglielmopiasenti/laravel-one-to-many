@@ -14,6 +14,7 @@
                 <tr>
                     <th scope="col">#</th>
                     <th scope="col">Name</th>
+                    <th scope="col">Type</th>
                     <th scope="col">URL</th>
                     <th scope="col">Created At</th>
                     <th scope="col">Updated At</th>
@@ -26,6 +27,7 @@
                     <tr>
                         <th scope="row">{{ $project->id }}</th>
                         <td>{{ $project->name }}</td>
+                        <td>{{ $project->type?->label }}</td>
                         <td>{{ $project->github_url }}</td>
                         <td>{{ $project->created_at }}</td>
                         <td>{{ $project->updated_at }}</td>
